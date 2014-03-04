@@ -1,0 +1,19 @@
+#!/bin/bash
+# Source common settings
+source /usr/share/ganeti/extstorage/v7000//settings.sh
+# Remove hostmapping
+HOSTMAP=`$SSH svctask mkvdiskhostmap -force -host $HOSTNAME ganeti_${VOL_NAME}`
+echo $DATE "Hostmap: " $HOSTMAP  >>$LOG
+#Rescan scsi bus
+for i in `seq 1 2`; do echo "- - -" > /sys/class/scsi_host/host$i/scan; done >/dev/null
+echo $DATE "Rescanning SCSI bus" >>$LOG
+#rescan multipath
+#/etc/init.d/multipath-tools restart >/dev/null
+# force devmap reload
+DEVMAP=`multipath -r`
+echo $DATE "Devmap: " $DEVMAP >>$LOG
+# Get volum UID
+DISKNAME=`$SSH lsvdisk ganeti_${VOL_NAME}|grep vdisk_UID|awk '{print tolower($2)}'`
+echo $DATE "Diskname: " $DISKNAME >>$LOG
+# Return path to new blockdevice
+echo -n /dev/mapper/3${DISKNAME}

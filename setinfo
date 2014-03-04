@@ -1,0 +1,15 @@
+#!/bin/bash 
+# TODO: Implement setinfo 
+
+# This script is used to add metadata to an existing volume. It is
+# helpful when we need to keep an external, Ganeti-independent mapping
+# between instances and volumes; primarily for recovery reasons. This
+# is provider specific and the author of the provider chooses
+# whether/how to implement this. You can just exit with 0, if you do
+# not want to implement this feature, without harming the overall
+# functionality of the provider.  The VOL_METADATA variable contains
+# the metadata of the volume.  Currently, Ganeti sets this value to
+# originstname+X where X is the instance’s name.  The script returns 0
+# on success.
+
+true

@@ -1,0 +1,15 @@
+#!/bin/bash
+# Source common settings
+source /usr/share/ganeti/extstorage/v7000/settings.sh
+# Get UID
+DISKNAME=`$SSH  lsvdisk ganeti_${VOL_NAME}|grep vdisk_UID|awk '{print tolower($2)}'`
+echo $DATE "UUID: " $DISKNAME >>$LOG
+#Remove disk (ALL DATA LOST!)
+RMVDISK=`$SSH svctask rmvdisk -force ganeti_${VOL_NAME}`
+echo $DATE "RMVDISK: " $RMVDISK  >>$LOG
+# Rescan devmaps
+RESCAN=`multipath -r`
+echo $DATE "Rescan: " $RESCAN  >>$LOG
+#Flush multipath -do we need to?
+FLUSH= `multipath -f $DISKNAME`
+echo $DATE "Flush: " $FLUSH  >>$LOG

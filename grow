@@ -1,0 +1,18 @@
+#!/bin/bash
+# TODO: Implement grow
+
+# This command is used to grow an existing volume of the external
+# storage.  The VOL_NAME variable denotes the volume to grow.  The
+# VOL_SIZE variable denotes the current volume’s size (in
+# mebibytes). The VOL_NEW_SIZE variable denotes the final size after the
+# volume has been grown (in mebibytes).  The amount of grow can be
+# easily calculated by the scipt and is: grow_amount = VOL_NEW_SIZE -
+# VOL_SIZE (in mebibytes) Ganeti ensures that: VOL_NEW_SIZE > VOL_SIZE
+# If the script returns successfully, then the volume inside the
+# external storage will have a new size of VOL_NEW_SIZE. This isn’t
+# immediately reflected to the instance’s disk. See gnt-instance grow
+# for more details on when the running instance becomes aware of its
+# grown disk.  The script returns 0 on success.
+
+
+true

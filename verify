@@ -1,0 +1,12 @@
+#!/bin/bash
+# TODO: Implement verify
+
+# The verify script is used to verify consistency of the external
+# parameters (ext-params) (see below). The command should take one or
+# more arguments denoting what checks should be performed, and return a
+# proper exit code depending on whether the validation failed or
+# succeeded.  Currently, the script is not invoked by Ganeti, but should
+# be present for future use and consistency with gnt-os-interface’s
+# verify script.  The script should return 0 on success.
+
+true
