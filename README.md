@@ -8,4 +8,4 @@ THIS IS STILL WORK IN PROGRESS, USE AT YOUR OWN RISK
 * Place scripts in /usr/share/ganeti/extstorage/v7000
 * Enable ext storage in the cluster
 * Generate ssh key (or password) and configure ganeti user in the v7000
-* Modify settings.sh accordenly
+* Modify settings.sh accordingly
