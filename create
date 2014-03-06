@@ -2,5 +2,5 @@
 # Source common settings
 source /usr/share/ganeti/extstorage/v7000/settings.sh
 # Create volume
-CREATE=`$SSH svctask mkvdisk -cache readwrite -copies 1 -iogrp io_grp0 -mdiskgrp $POOL -name ganeti_${VOL_NAME} -size $VOL_SIZE -unit mb -vtype striped`
+CREATE=`$SSH svctask mkvdisk -autoexpand -cache readwrite -copies 1 -grainsize 256 -iogrp io_grp0 -mdiskgrp $POOL -name ganeti_${VOL_NAME} -rsize 2% -size $VOL_SIZE -unit mb -syncrate 50 -vtype striped -warning 80%`
 echo $DATE "Create: " $CREATE >>$LOG
