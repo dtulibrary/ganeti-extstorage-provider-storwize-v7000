@@ -5,10 +5,11 @@ source /usr/share/ganeti/extstorage/v7000//settings.sh
 HOSTMAP=`$SSH svctask mkvdiskhostmap -force -host $HOSTNAME ganeti_${VOL_NAME}`
 echo $DATE "Hostmap: " $HOSTMAP  >>$LOG
 #Rescan scsi bus
-for i in `seq 1 2`; do echo "- - -" > /sys/class/scsi_host/host$i/scan; done >/dev/null
+#for i in `seq 0 2`; do echo "- - -" > /sys/class/scsi_host/host$i/scan; done >/dev/null
+/sbin/rescan-scsi-bus >/dev/null
 echo $DATE "Rescanning SCSI bus" >>$LOG
 #rescan multipath
-#/etc/init.d/multipath-tools restart >/dev/null
+/etc/init.d/multipath-tools restart >/dev/null
 # force devmap reload
 DEVMAP=`multipath -r`
 echo $DATE "Devmap: " $DEVMAP >>$LOG

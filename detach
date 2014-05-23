@@ -4,16 +4,25 @@ source /usr/share/ganeti/extstorage/v7000/settings.sh
 # Get diskname
 DISKNAME=`$SSH lsvdisk ganeti_${VOL_NAME}|grep vdisk_UID|awk '{print tolower($2)}'`
 echo $DATE "Diskname: " $DISKNAME  >>$LOG
-# Remove hostmap
-HOSTMAP=`$SSH svctask rmvdiskhostmap -host $HOSTNAME ganeti_${VOL_NAME}`
-echo $DATE "Hostmap: " $HOSTMAP  >>$LOG
-# Rescan scsi bus
-for i in `seq 1 2`; do echo "- - -" > /sys/class/scsi_host/host$i/scan; done
-echo $DATE "Rescan SCSI bus"  >>$LOG
-#/etc/init.d/multipath-tools restart
-# rescan devmaps
-DEVMAPS=`multipath -r`
-echo $DATE "Devmaps: " $DEVMAPS  >>$LOG
+# Get devicemapper name
+MPATH=`multipath -ll|grep ${DISKNAME}|awk '{print $2}'`
+echo $DATE "mpath: " $MPATH  >>$LOG
+SLAVEDEVICES=`ls /sys/devices/virtual/block/${MPATH}/slaves`
+echo $DATE "Slavedevices: " $SLAVEDEVICES  >>$LOG
 # Flush multipath
 FLUSH=`multipath -f $DISKNAME`
 echo $DATE "Flush: " $FLUSH  >>$LOG
+# Remove hostmap
+HOSTMAP=`$SSH svctask rmvdiskhostmap -host $HOSTNAME ganeti_${VOL_NAME}`
+echo $DATE "Hostmap: " $HOSTMAP  >>$LOG
+# Delete scsci devices
+for i in ${SLAVEDEVICES}; do echo 1 > /sys/block/$i/device/delete; done
+echo $DATE "Deleting devices "  >>$LOG
+# Rescan scsi bus
+#for i in `seq 0 2`; do echo "- - -" > /sys/class/scsi_host/host$i/scan; done
+/sbin/rescan-scsi-bus >/dev/null
+echo $DATE "Rescan SCSI bus"  >>$LOG
+/etc/init.d/multipath-tools restart >/dev/null
+# rescan devmaps
+DEVMAPS=`multipath -r`
+echo $DATE "Devmaps: " $DEVMAPS  >>$LOG
